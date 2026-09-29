@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS 新特性支持与降级实验室</title>
+  <meta name="description" content="检测容器查询、子网格、现代颜色函数、逻辑属性、滚动时间线和视图过渡，并对比原生方案与降级方案。">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="wrap hero">
+      <div>
+        <p class="eyebrow">Feature Detection · Progressive Enhancement</p>
+        <h1>CSS 新特性支持与降级实验室</h1>
+        <p class="lede">通过 <code>CSS.supports</code>、DOM/CSSOM 探针、布局与绘制行为验证，区分“完全支持、部分支持、前缀实现和误判”，并提供可切换的一致降级体验。</p>
+      </div>
+      <div class="hero-actions" aria-label="检测操作">
+        <button id="rerunDetection" class="button primary" type="button">重新检测</button>
+        <button id="watchRuntime" class="button" type="button" aria-pressed="true">运行时监视：开</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="wrap layout">
+    <section class="panel environment" aria-labelledby="environmentTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Current Browser</p>
+          <h2 id="environmentTitle">运行环境</h2>
+        </div>
+        <span id="detectionState" class="state-pill" role="status">准备检测</span>
+      </div>
+      <dl id="environmentMeta" class="environment-meta"></dl>
+      <p class="note">UA 只用于显示浏览器/引擎差异；支持结论始终来自实时特性探针，不按浏览器名称推断。</p>
+    </section>
+
+    <section class="panel controls-panel" aria-labelledby="controlsTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Fallback Control</p>
+          <h2 id="controlsTitle">降级方案</h2>
+        </div>
+      </div>
+      <div class="global-mode-row">
+        <label for="globalMode">全局切换</label>
+        <select id="globalMode">
+          <option value="auto">自动：按检测结果选择</option>
+          <option value="native">强制原生</option>
+          <option value="fallback">强制降级</option>
+        </select>
+        <span class="note">自动模式下，“部分支持”也优先走安全降级，可在单卡中强制原生验证。</span>
+      </div>
+    </section>
+
+    <section class="panel chart-panel" aria-labelledby="chartTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Canvas Comparison</p>
+          <h2 id="chartTitle">原生能力与降级覆盖对比</h2>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="compareChart" height="360" role="img" aria-label="各项 CSS 特性的原生支持程度与降级覆盖率柱状图"></canvas>
+      </div>
+      <div id="chartLegend" class="legend" aria-hidden="true"><span><i class="native"></i>当前浏览器原生支持</span><span><i class="fallback"></i>本实验室降级策略覆盖</span></div>
+    </section>
+
+    <section id="featureCards" class="feature-grid" aria-live="polite"></section>
+
+    <section class="panel history-panel" aria-labelledby="historyTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">IndexedDB History</p>
+          <h2 id="historyTitle">检测历史</h2>
+        </div>
+        <button id="clearHistory" class="button subtle danger" type="button">清空历史</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>触发方式</th>
+              <th>环境</th>
+              <th>结果</th>
+              <th>修正</th>
+              <th>详情</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody"></tbody>
+        </table>
+      </div>
+      <p id="historyEmpty" class="empty-state">暂无检测历史。</p>
+    </section>
+  </main>
+
+  <template id="featureCardTemplate">
+    <article class="panel feature-card" data-feature-id>
+      <div class="feature-header">
+        <div>
+          <p class="eyebrow feature-category"></p>
+          <h3 class="feature-title"></h3>
+        </div>
+        <span class="status-badge"></span>
+      </div>
+      <p class="feature-summary"></p>
+      <ul class="signal-list"></ul>
+      <div class="correction-box" hidden></div>
+      <div class="prefix-row"></div>
+
+      <div class="demo-block">
+        <div class="demo-toolbar">
+          <div class="segmented" role="group" aria-label="切换示例方案">
+            <button type="button" data-mode="auto">自动</button>
+            <button type="button" data-mode="native">原生</button>
+            <button type="button" data-mode="fallback">降级</button>
+          </div>
+          <span class="active-mode-note"></span>
+        </div>
+        <div class="demo-stage"></div>
+      </div>
+
+      <details class="solution-details">
+        <summary>降级方案与代码</summary>
+        <div class="solution-content"></div>
+      </details>
+    </article>
+  </template>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>检测结果仅代表当前页面运行时；浏览器版本、开关标志、前缀和用户设置都会影响结果。</p>
+    </div>
+  </footer>
+
+  <script src="js/db.js"></script>
+  <script src="js/detectors.js"></script>
+  <script src="js/demos.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
