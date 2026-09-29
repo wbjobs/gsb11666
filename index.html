@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSS 新特性兼容检测台</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">CSS Feature Detection Lab</p>
+      <h1>CSS 新特性兼容检测台</h1>
+      <p class="lede">区分“支持 / 部分支持 / 不支持”，用运行时探针修正误判，并立即切换查看一致的降级方案。</p>
+    </div>
+    <div class="hero-actions">
+      <button id="rerunBtn" class="button primary" type="button">重新检测</button>
+      <button id="toggleWatchBtn" class="button" type="button" aria-pressed="true">运行时监听：开</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel overview" aria-labelledby="overviewTitle">
+      <div class="section-heading">
+        <div>
+          <h2 id="overviewTitle">当前环境</h2>
+          <p id="environmentText">正在收集浏览器环境信息…</p>
+        </div>
+        <span id="detectState" class="state-pill">检测中</span>
+      </div>
+      <div id="statsGrid" class="stats-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="featuresTitle">
+      <div class="section-heading">
+        <div>
+          <h2 id="featuresTitle">特性与降级对比</h2>
+          <p>“自动”依据修正后的检测结果选择；也可以手动强制现代方案或降级方案。</p>
+        </div>
+      </div>
+      <div id="featureGrid" class="feature-grid"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="historyTitle">
+      <div class="section-heading">
+        <div>
+          <h2 id="historyTitle">检测历史</h2>
+          <p>记录保存在 IndexedDB；浏览器禁用存储时使用 localStorage 或内存兜底。</p>
+        </div>
+        <button id="clearHistoryBtn" class="button subtle" type="button">清空历史</button>
+      </div>
+      <div id="historyList" class="history-list">暂无检测记录</div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <template id="featureCardTemplate">
+    <article class="feature-card">
+      <div class="card-head">
+        <div>
+          <h3 class="feature-name"></h3>
+          <p class="feature-summary"></p>
+        </div>
+        <span class="status-badge"></span>
+      </div>
+
+      <div class="result-grid">
+        <div>
+          <span class="result-label">原始 CSS.supports</span>
+          <strong class="raw-result"></strong>
+        </div>
+        <div>
+          <span class="result-label">运行时修正</span>
+          <strong class="corrected-result"></strong>
+        </div>
+      </div>
+
+      <div class="prefix-box">
+        <span>标准 / 前缀：</span>
+        <code class="prefix-value"></code>
+      </div>
+
+      <details class="details-box" open>
+        <summary>部分支持、浏览器差异与误判修正</summary>
+        <ul class="note-list"></ul>
+      </details>
+
+      <div class="fallback-box">
+        <strong>一致降级方案</strong>
+        <p class="fallback-text"></p>
+      </div>
+
+      <div class="mode-row" role="group" aria-label="降级方案切换">
+        <button type="button" class="mode-button" data-mode="auto">自动</button>
+        <button type="button" class="mode-button" data-mode="modern">现代</button>
+        <button type="button" class="mode-button" data-mode="fallback">降级</button>
+      </div>
+
+      <div class="effective-row">
+        <span class="effective-label">实际使用</span>
+        <strong class="effective-value"></strong>
+        <span class="validity-chip"></span>
+      </div>
+
+      <div class="demo-stage"></div>
+      <div class="canvas-wrap">
+        <canvas class="compare-canvas" aria-label="现代方案与降级方案可视化对比"></canvas>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
